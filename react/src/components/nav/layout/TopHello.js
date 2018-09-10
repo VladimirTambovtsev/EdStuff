@@ -28,7 +28,7 @@ class TopHello extends Component {
         )}
         {!authToken && (
           <Link to='/login' className='ml1 no-underline black'>
-            login
+            Войти
           </Link>
         )}
         </div>

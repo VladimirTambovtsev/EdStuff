@@ -49,7 +49,7 @@ class ListSideBar extends Component {
               <ListItemIcon>
                 <Icon>mode_edit</Icon>
               </ListItemIcon>
-              <ListItemText primary='Drafts'/>
+              <ListItemText primary='Создать курс'/>
             </MenuItem>
           </Link>
           <Link to='/cars' className='link'>
@@ -66,6 +66,15 @@ class ListSideBar extends Component {
                 <Icon>chat</Icon>
               </ListItemIcon>
               <ListItemText primary='Чат'/>
+            </MenuItem>
+          </Link>
+          <Divider />
+          <Link to='/courses/my' className='link'>
+            <MenuItem>
+              <ListItemIcon>
+                <Icon>view_quilt</Icon>
+              </ListItemIcon>
+              <ListItemText primary='Мои курсы'/>
             </MenuItem>
           </Link>
           <Divider />

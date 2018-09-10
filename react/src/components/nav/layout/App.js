@@ -3,6 +3,7 @@ import FeedPage from '../../post/FeedPage'
 import DraftsPage from '../../post/DraftsPage'
 import CarsPage from '../../car/CarsPage'
 import ChatsPage from '../../chat/ChatsPage'
+import CourselistContainer from '../../post/CourselistContainer'
 import CreateCar from '../../car/CreateCar'
 import CreatePage from '../../post/CreatePage'
 import DetailPage from '../../post/DetailPage'
@@ -84,6 +85,7 @@ class App extends Component {
                 <Route path='/drafts' component={DraftsPage} />
                 <Route path='/cars' component={CarsPage} />
                 <Route path='/chats' component={ChatsPage} />
+                <Route path='/courses/:id' component={CourselistContainer} />
                 <Route path='/users' component={UsersPage} />
                 <Route path='/user/create' component={UserPageCreate} />
                 <Route path='/user/:id' component={UserPage} />
