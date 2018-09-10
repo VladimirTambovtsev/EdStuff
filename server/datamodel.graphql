@@ -1,0 +1,72 @@
+
+
+enum Role {
+  ADMIN
+  CUSTOMER
+}
+
+type Post {
+  id: ID! @unique
+  isPublished: Boolean! @default(value: "false")
+  title: String!
+  text: String!
+  nameFile: String!
+  author: User
+  cars: [Car!]!
+  chapters: [Chapter!]!
+  createdAt: DateTime!
+}
+
+
+type Chapter {
+  id: ID! @unique
+  name: String!
+  description: String
+  courseBy: Post
+  files: String
+  createdAt: DateTime!
+}
+
+type Wishlist {
+  id: ID! @unique
+  courseId: [Post!]!
+  userId: User!
+  createdAt: DateTime!
+}
+
+type Courselist {
+  id: ID! @unique
+}
+
+type Car {
+  id: ID! @unique
+  name: String!
+  createdAt: DateTime!
+}
+
+type Chat {
+  id: ID! @unique
+  message: String!
+  author: User
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+
+type User {
+  id: ID! @unique
+  email: String! @unique
+  emailvalidated: Boolean! @default(value: false)
+  validateEmailToken: String! @unique
+  password: String!
+  nameFile: String!
+  resetPasswordToken: String! @unique
+  resetPasswordExpires: Float
+  name: String!
+  posts: [Post!]!
+  wishlist: [Wishlist!]!
+  
+  role: Role! @default(value: "CUSTOMER")
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}

@@ -1,0 +1,51 @@
+Arguments: 
+  /Users/vladimir/.nvm/versions/node/v9.3.0/bin/node /Users/vladimir/.yarn/bin/yarn.js add apollo-client-preset graphqlgraphql-tag react-apollo react-router-native
+
+PATH: 
+  /Library/Frameworks/Python.framework/Versions/3.6/bin:/Library/Frameworks/Python.framework/Versions/2.7/bin:/Users/vladimir/Documents/go/bin:/Users/vladimir/.yarn/bin:/Users/vladimir/.config/yarn/global/node_modules/.bin:/Users/vladimir/anaconda3/bin:/Users/vladimir/.nvm/versions/node/v9.3.0/bin:/opt/local/bin:/opt/local/sbin:/Library/Frameworks/Python.framework/Versions/3.4/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Applications/MAMP/Library/bin
+
+Yarn version: 
+  1.5.1
+
+Node version: 
+  9.3.0
+
+Platform: 
+  darwin x64
+
+npm manifest: 
+  {
+    "name": "empty-project-template",
+    "main": "node_modules/expo/AppEntry.js",
+    "private": true,
+    "scripts": {
+      "start": "expo start",
+      "android": "expo start --android",
+      "ios": "expo start --ios",
+      "eject": "expo eject"
+    },
+    "dependencies": {
+      "expo": "^29.0.0",
+      "react": "16.3.1",
+      "react-native": "https://github.com/expo/react-native/archive/sdk-29.0.0.tar.gz"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
+
+Trace: 
+  Error: https://registry.yarnpkg.com/graphqlgraphql-tag: Not found
+      at Request.params.callback [as _callback] (/Users/vladimir/.yarn/lib/cli.js:65019:18)
+      at Request.self.callback (/Users/vladimir/.yarn/lib/cli.js:132430:22)
+      at Request.emit (events.js:159:13)
+      at Request.<anonymous> (/Users/vladimir/.yarn/lib/cli.js:133413:10)
+      at Request.emit (events.js:159:13)
+      at IncomingMessage.<anonymous> (/Users/vladimir/.yarn/lib/cli.js:133333:12)
+      at Object.onceWrapper (events.js:254:19)
+      at IncomingMessage.emit (events.js:164:20)
+      at endReadableNT (_stream_readable.js:1062:12)
+      at process._tickCallback (internal/process/next_tick.js:152:19)
