@@ -9,4 +9,4 @@ projects:
     extensions:
       prisma: prisma.yml
       endpoints:
-        default: 'http://localhost:4466/naperg/dev'
+        default: 'http://localhost:4466'

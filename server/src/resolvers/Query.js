@@ -63,23 +63,23 @@ async function wishlist (parent, { userId }, ctx, info) {
 
 }
 
-// async function usersCourse (parent, { userId }, ctx, info) {
+async function courselist (parent, { userId }, ctx, info) {
 
-//   const userExists = await ctx.db.exists.User({
-//     id: userId
-//   })
-//   if (!userExists) {
-//     throw new Error("User cannot be found with this id")
-//   }
+  const userExists = await ctx.db.exists.User({
+    id: userId
+  })
+  if (!userExists) {
+    throw new Error("User cannot be found with this id")
+  }
 
-//   return ctx.db.query.usersCourses({
-//     where: {
-//       userId: {
-//         id: userId
-//       }
-//     }
-//   }, info)
-// }
+  return ctx.db.query.courselists({
+    where: {
+      userId: {
+        id: userId
+      }
+    }
+  }, info)
+}
 
 const Query = {
   me,
@@ -91,6 +91,7 @@ const Query = {
   drafts,
   post,
   wishlist,
+  courselist,
   // cars: forwardTo('db'),
   chatsConnection: forwardTo('db'),
   car: forwardTo('db'),

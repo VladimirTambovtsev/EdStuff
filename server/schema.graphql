@@ -6,6 +6,7 @@
 # import Mutation.createChat, Query.chatsConnection, Query.chat from "./generated-schema.graphql"
 # import Chapter from "./generated-schema.graphql"
 # import Wishlist from "./generated-schema.graphql"
+# import Courselist from "./generated-schema.graphql"
 
 
 type Query {
@@ -14,6 +15,7 @@ type Query {
   drafts(orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]!
   post(id: ID!): Post
   wishlist(userId: ID!): [Wishlist!]!
+  courselist(userId: ID!): [Courselist!]!
 }
 
 type Mutation {
@@ -32,7 +34,7 @@ type Mutation {
   createChapter(name: String!, courseBy: ID!, description: String, files: String): Chapter!
   createWishlist(courseId: ID!, userId: ID!): Wishlist!
   deleteWishlist(id: ID!, courseId:ID!, userId:ID!):  Wishlist!
-  
+  createCourselist(courseId: ID!, userId: ID!): Courselist!
 }
 
 type AuthPayload {

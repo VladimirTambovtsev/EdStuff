@@ -1,5 +1,5 @@
-# source: http://localhost:4466/naperg/dev
-# timestamp: Mon Sep 10 2018 14:17:22 GMT+0300 (MSK)
+# source: http://localhost:4466
+# timestamp: Mon Sep 10 2018 14:57:40 GMT+0300 (MSK)
 
 type AggregateCar {
   count: Int!
@@ -13,15 +13,15 @@ type AggregateChat {
   count: Int!
 }
 
+type AggregateCourselist {
+  count: Int!
+}
+
 type AggregatePost {
   count: Int!
 }
 
 type AggregateUser {
-  count: Int!
-}
-
-type AggregateusersCourse {
   count: Int!
 }
 
@@ -842,6 +842,209 @@ input ChatWhereUniqueInput {
   id: ID
 }
 
+type Courselist implements Node {
+  id: ID!
+  courseId(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
+  userId(where: UserWhereInput): User!
+  createdAt: DateTime!
+}
+
+"""A connection to a list of items."""
+type CourselistConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [CourselistEdge]!
+  aggregate: AggregateCourselist!
+}
+
+input CourselistCreateInput {
+  courseId: PostCreateManyInput
+  userId: UserCreateOneWithoutCourselistInput!
+}
+
+input CourselistCreateManyWithoutUserIdInput {
+  create: [CourselistCreateWithoutUserIdInput!]
+  connect: [CourselistWhereUniqueInput!]
+}
+
+input CourselistCreateWithoutUserIdInput {
+  courseId: PostCreateManyInput
+}
+
+"""An edge in a connection."""
+type CourselistEdge {
+  """The item at the end of the edge."""
+  node: Courselist!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum CourselistOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type CourselistPreviousValues {
+  id: ID!
+  createdAt: DateTime!
+}
+
+type CourselistSubscriptionPayload {
+  mutation: MutationType!
+  node: Courselist
+  updatedFields: [String!]
+  previousValues: CourselistPreviousValues
+}
+
+input CourselistSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [CourselistSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [CourselistSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [CourselistSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: CourselistWhereInput
+}
+
+input CourselistUpdateInput {
+  courseId: PostUpdateManyInput
+  userId: UserUpdateOneWithoutCourselistInput
+}
+
+input CourselistUpdateManyWithoutUserIdInput {
+  create: [CourselistCreateWithoutUserIdInput!]
+  connect: [CourselistWhereUniqueInput!]
+  disconnect: [CourselistWhereUniqueInput!]
+  delete: [CourselistWhereUniqueInput!]
+  update: [CourselistUpdateWithWhereUniqueWithoutUserIdInput!]
+  upsert: [CourselistUpsertWithWhereUniqueWithoutUserIdInput!]
+}
+
+input CourselistUpdateWithoutUserIdDataInput {
+  courseId: PostUpdateManyInput
+}
+
+input CourselistUpdateWithWhereUniqueWithoutUserIdInput {
+  where: CourselistWhereUniqueInput!
+  data: CourselistUpdateWithoutUserIdDataInput!
+}
+
+input CourselistUpsertWithWhereUniqueWithoutUserIdInput {
+  where: CourselistWhereUniqueInput!
+  update: CourselistUpdateWithoutUserIdDataInput!
+  create: CourselistCreateWithoutUserIdInput!
+}
+
+input CourselistWhereInput {
+  """Logical AND on all given filters."""
+  AND: [CourselistWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [CourselistWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [CourselistWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  courseId_every: PostWhereInput
+  courseId_some: PostWhereInput
+  courseId_none: PostWhereInput
+  userId: UserWhereInput
+}
+
+input CourselistWhereUniqueInput {
+  id: ID
+}
+
 scalar DateTime
 
 """
@@ -854,42 +1057,42 @@ type Mutation {
   createPost(data: PostCreateInput!): Post!
   createChapter(data: ChapterCreateInput!): Chapter!
   createWishlist(data: WishlistCreateInput!): Wishlist!
-  createusersCourse(data: usersCourseCreateInput!): usersCourse!
+  createCourselist(data: CourselistCreateInput!): Courselist!
   createCar(data: CarCreateInput!): Car!
   createChat(data: ChatCreateInput!): Chat!
   createUser(data: UserCreateInput!): User!
   updatePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post
   updateChapter(data: ChapterUpdateInput!, where: ChapterWhereUniqueInput!): Chapter
   updateWishlist(data: WishlistUpdateInput!, where: WishlistWhereUniqueInput!): Wishlist
-  updateusersCourse(data: usersCourseUpdateInput!, where: usersCourseWhereUniqueInput!): usersCourse
+  updateCourselist(data: CourselistUpdateInput!, where: CourselistWhereUniqueInput!): Courselist
   updateCar(data: CarUpdateInput!, where: CarWhereUniqueInput!): Car
   updateChat(data: ChatUpdateInput!, where: ChatWhereUniqueInput!): Chat
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   deletePost(where: PostWhereUniqueInput!): Post
   deleteChapter(where: ChapterWhereUniqueInput!): Chapter
   deleteWishlist(where: WishlistWhereUniqueInput!): Wishlist
-  deleteusersCourse(where: usersCourseWhereUniqueInput!): usersCourse
+  deleteCourselist(where: CourselistWhereUniqueInput!): Courselist
   deleteCar(where: CarWhereUniqueInput!): Car
   deleteChat(where: ChatWhereUniqueInput!): Chat
   deleteUser(where: UserWhereUniqueInput!): User
   upsertPost(where: PostWhereUniqueInput!, create: PostCreateInput!, update: PostUpdateInput!): Post!
   upsertChapter(where: ChapterWhereUniqueInput!, create: ChapterCreateInput!, update: ChapterUpdateInput!): Chapter!
   upsertWishlist(where: WishlistWhereUniqueInput!, create: WishlistCreateInput!, update: WishlistUpdateInput!): Wishlist!
-  upsertusersCourse(where: usersCourseWhereUniqueInput!, create: usersCourseCreateInput!, update: usersCourseUpdateInput!): usersCourse!
+  upsertCourselist(where: CourselistWhereUniqueInput!, create: CourselistCreateInput!, update: CourselistUpdateInput!): Courselist!
   upsertCar(where: CarWhereUniqueInput!, create: CarCreateInput!, update: CarUpdateInput!): Car!
   upsertChat(where: ChatWhereUniqueInput!, create: ChatCreateInput!, update: ChatUpdateInput!): Chat!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   updateManyPosts(data: PostUpdateInput!, where: PostWhereInput): BatchPayload!
   updateManyChapters(data: ChapterUpdateInput!, where: ChapterWhereInput): BatchPayload!
   updateManyWishlists(data: WishlistUpdateInput!, where: WishlistWhereInput): BatchPayload!
-  updateManyUsersCourses(data: usersCourseUpdateInput!, where: usersCourseWhereInput): BatchPayload!
+  updateManyCourselists(data: CourselistUpdateInput!, where: CourselistWhereInput): BatchPayload!
   updateManyCars(data: CarUpdateInput!, where: CarWhereInput): BatchPayload!
   updateManyChats(data: ChatUpdateInput!, where: ChatWhereInput): BatchPayload!
   updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
   deleteManyPosts(where: PostWhereInput): BatchPayload!
   deleteManyChapters(where: ChapterWhereInput): BatchPayload!
   deleteManyWishlists(where: WishlistWhereInput): BatchPayload!
-  deleteManyUsersCourses(where: usersCourseWhereInput): BatchPayload!
+  deleteManyCourselists(where: CourselistWhereInput): BatchPayload!
   deleteManyCars(where: CarWhereInput): BatchPayload!
   deleteManyChats(where: ChatWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
@@ -1365,21 +1568,21 @@ type Query {
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post]!
   chapters(where: ChapterWhereInput, orderBy: ChapterOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Chapter]!
   wishlists(where: WishlistWhereInput, orderBy: WishlistOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Wishlist]!
-  usersCourses(where: usersCourseWhereInput, orderBy: usersCourseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [usersCourse]!
+  courselists(where: CourselistWhereInput, orderBy: CourselistOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Courselist]!
   cars(where: CarWhereInput, orderBy: CarOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Car]!
   chats(where: ChatWhereInput, orderBy: ChatOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Chat]!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   post(where: PostWhereUniqueInput!): Post
   chapter(where: ChapterWhereUniqueInput!): Chapter
   wishlist(where: WishlistWhereUniqueInput!): Wishlist
-  usersCourse(where: usersCourseWhereUniqueInput!): usersCourse
+  courselist(where: CourselistWhereUniqueInput!): Courselist
   car(where: CarWhereUniqueInput!): Car
   chat(where: ChatWhereUniqueInput!): Chat
   user(where: UserWhereUniqueInput!): User
   postsConnection(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PostConnection!
   chaptersConnection(where: ChapterWhereInput, orderBy: ChapterOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ChapterConnection!
   wishlistsConnection(where: WishlistWhereInput, orderBy: WishlistOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): WishlistConnection!
-  usersCoursesConnection(where: usersCourseWhereInput, orderBy: usersCourseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): usersCourseConnection!
+  courselistsConnection(where: CourselistWhereInput, orderBy: CourselistOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CourselistConnection!
   carsConnection(where: CarWhereInput, orderBy: CarOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CarConnection!
   chatsConnection(where: ChatWhereInput, orderBy: ChatOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ChatConnection!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
@@ -1400,7 +1603,7 @@ type Subscription {
   post(where: PostSubscriptionWhereInput): PostSubscriptionPayload
   chapter(where: ChapterSubscriptionWhereInput): ChapterSubscriptionPayload
   wishlist(where: WishlistSubscriptionWhereInput): WishlistSubscriptionPayload
-  usersCourse(where: usersCourseSubscriptionWhereInput): usersCourseSubscriptionPayload
+  courselist(where: CourselistSubscriptionWhereInput): CourselistSubscriptionPayload
   car(where: CarSubscriptionWhereInput): CarSubscriptionPayload
   chat(where: ChatSubscriptionWhereInput): ChatSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
@@ -1418,7 +1621,7 @@ type User implements Node {
   name: String!
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
   wishlist(where: WishlistWhereInput, orderBy: WishlistOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Wishlist!]
-  usersCourse(where: usersCourseWhereInput, orderBy: usersCourseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [usersCourse!]
+  courselist(where: CourselistWhereInput, orderBy: CourselistOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Courselist!]
   role: Role!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -1446,11 +1649,16 @@ input UserCreateInput {
   role: Role
   posts: PostCreateManyWithoutAuthorInput
   wishlist: WishlistCreateManyWithoutUserIdInput
-  usersCourse: usersCourseCreateManyWithoutUserIdInput
+  courselist: CourselistCreateManyWithoutUserIdInput
 }
 
 input UserCreateOneInput {
   create: UserCreateInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutCourselistInput {
+  create: UserCreateWithoutCourselistInput
   connect: UserWhereUniqueInput
 }
 
@@ -1459,14 +1667,23 @@ input UserCreateOneWithoutPostsInput {
   connect: UserWhereUniqueInput
 }
 
-input UserCreateOneWithoutUsersCourseInput {
-  create: UserCreateWithoutUsersCourseInput
-  connect: UserWhereUniqueInput
-}
-
 input UserCreateOneWithoutWishlistInput {
   create: UserCreateWithoutWishlistInput
   connect: UserWhereUniqueInput
+}
+
+input UserCreateWithoutCourselistInput {
+  email: String!
+  emailvalidated: Boolean
+  validateEmailToken: String!
+  password: String!
+  nameFile: String!
+  resetPasswordToken: String!
+  resetPasswordExpires: Float
+  name: String!
+  role: Role
+  posts: PostCreateManyWithoutAuthorInput
+  wishlist: WishlistCreateManyWithoutUserIdInput
 }
 
 input UserCreateWithoutPostsInput {
@@ -1480,21 +1697,7 @@ input UserCreateWithoutPostsInput {
   name: String!
   role: Role
   wishlist: WishlistCreateManyWithoutUserIdInput
-  usersCourse: usersCourseCreateManyWithoutUserIdInput
-}
-
-input UserCreateWithoutUsersCourseInput {
-  email: String!
-  emailvalidated: Boolean
-  validateEmailToken: String!
-  password: String!
-  nameFile: String!
-  resetPasswordToken: String!
-  resetPasswordExpires: Float
-  name: String!
-  role: Role
-  posts: PostCreateManyWithoutAuthorInput
-  wishlist: WishlistCreateManyWithoutUserIdInput
+  courselist: CourselistCreateManyWithoutUserIdInput
 }
 
 input UserCreateWithoutWishlistInput {
@@ -1508,7 +1711,7 @@ input UserCreateWithoutWishlistInput {
   name: String!
   role: Role
   posts: PostCreateManyWithoutAuthorInput
-  usersCourse: usersCourseCreateManyWithoutUserIdInput
+  courselist: CourselistCreateManyWithoutUserIdInput
 }
 
 """An edge in a connection."""
@@ -1562,233 +1765,6 @@ type UserPreviousValues {
   updatedAt: DateTime!
 }
 
-type usersCourse implements Node {
-  id: ID!
-  courseId(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
-  userId(where: UserWhereInput): User!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-"""A connection to a list of items."""
-type usersCourseConnection {
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """A list of edges."""
-  edges: [usersCourseEdge]!
-  aggregate: AggregateusersCourse!
-}
-
-input usersCourseCreateInput {
-  courseId: PostCreateManyInput
-  userId: UserCreateOneWithoutUsersCourseInput!
-}
-
-input usersCourseCreateManyWithoutUserIdInput {
-  create: [usersCourseCreateWithoutUserIdInput!]
-  connect: [usersCourseWhereUniqueInput!]
-}
-
-input usersCourseCreateWithoutUserIdInput {
-  courseId: PostCreateManyInput
-}
-
-"""An edge in a connection."""
-type usersCourseEdge {
-  """The item at the end of the edge."""
-  node: usersCourse!
-
-  """A cursor for use in pagination."""
-  cursor: String!
-}
-
-enum usersCourseOrderByInput {
-  id_ASC
-  id_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-
-type usersCoursePreviousValues {
-  id: ID!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-type usersCourseSubscriptionPayload {
-  mutation: MutationType!
-  node: usersCourse
-  updatedFields: [String!]
-  previousValues: usersCoursePreviousValues
-}
-
-input usersCourseSubscriptionWhereInput {
-  """Logical AND on all given filters."""
-  AND: [usersCourseSubscriptionWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [usersCourseSubscriptionWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [usersCourseSubscriptionWhereInput!]
-
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
-  mutation_in: [MutationType!]
-
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
-  updatedFields_contains: String
-
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
-  updatedFields_contains_every: [String!]
-
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
-  updatedFields_contains_some: [String!]
-  node: usersCourseWhereInput
-}
-
-input usersCourseUpdateInput {
-  courseId: PostUpdateManyInput
-  userId: UserUpdateOneWithoutUsersCourseInput
-}
-
-input usersCourseUpdateManyWithoutUserIdInput {
-  create: [usersCourseCreateWithoutUserIdInput!]
-  connect: [usersCourseWhereUniqueInput!]
-  disconnect: [usersCourseWhereUniqueInput!]
-  delete: [usersCourseWhereUniqueInput!]
-  update: [usersCourseUpdateWithWhereUniqueWithoutUserIdInput!]
-  upsert: [usersCourseUpsertWithWhereUniqueWithoutUserIdInput!]
-}
-
-input usersCourseUpdateWithoutUserIdDataInput {
-  courseId: PostUpdateManyInput
-}
-
-input usersCourseUpdateWithWhereUniqueWithoutUserIdInput {
-  where: usersCourseWhereUniqueInput!
-  data: usersCourseUpdateWithoutUserIdDataInput!
-}
-
-input usersCourseUpsertWithWhereUniqueWithoutUserIdInput {
-  where: usersCourseWhereUniqueInput!
-  update: usersCourseUpdateWithoutUserIdDataInput!
-  create: usersCourseCreateWithoutUserIdInput!
-}
-
-input usersCourseWhereInput {
-  """Logical AND on all given filters."""
-  AND: [usersCourseWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [usersCourseWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [usersCourseWhereInput!]
-  id: ID
-
-  """All values that are not equal to given value."""
-  id_not: ID
-
-  """All values that are contained in given list."""
-  id_in: [ID!]
-
-  """All values that are not contained in given list."""
-  id_not_in: [ID!]
-
-  """All values less than the given value."""
-  id_lt: ID
-
-  """All values less than or equal the given value."""
-  id_lte: ID
-
-  """All values greater than the given value."""
-  id_gt: ID
-
-  """All values greater than or equal the given value."""
-  id_gte: ID
-
-  """All values containing the given string."""
-  id_contains: ID
-
-  """All values not containing the given string."""
-  id_not_contains: ID
-
-  """All values starting with the given string."""
-  id_starts_with: ID
-
-  """All values not starting with the given string."""
-  id_not_starts_with: ID
-
-  """All values ending with the given string."""
-  id_ends_with: ID
-
-  """All values not ending with the given string."""
-  id_not_ends_with: ID
-  createdAt: DateTime
-
-  """All values that are not equal to given value."""
-  createdAt_not: DateTime
-
-  """All values that are contained in given list."""
-  createdAt_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  createdAt_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  createdAt_lt: DateTime
-
-  """All values less than or equal the given value."""
-  createdAt_lte: DateTime
-
-  """All values greater than the given value."""
-  createdAt_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  createdAt_gte: DateTime
-  updatedAt: DateTime
-
-  """All values that are not equal to given value."""
-  updatedAt_not: DateTime
-
-  """All values that are contained in given list."""
-  updatedAt_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  updatedAt_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  updatedAt_lt: DateTime
-
-  """All values less than or equal the given value."""
-  updatedAt_lte: DateTime
-
-  """All values greater than the given value."""
-  updatedAt_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  updatedAt_gte: DateTime
-  courseId_every: PostWhereInput
-  courseId_some: PostWhereInput
-  courseId_none: PostWhereInput
-  userId: UserWhereInput
-}
-
-input usersCourseWhereUniqueInput {
-  id: ID
-}
-
 type UserSubscriptionPayload {
   mutation: MutationType!
   node: User
@@ -1840,7 +1816,7 @@ input UserUpdateDataInput {
   role: Role
   posts: PostUpdateManyWithoutAuthorInput
   wishlist: WishlistUpdateManyWithoutUserIdInput
-  usersCourse: usersCourseUpdateManyWithoutUserIdInput
+  courselist: CourselistUpdateManyWithoutUserIdInput
 }
 
 input UserUpdateInput {
@@ -1855,7 +1831,7 @@ input UserUpdateInput {
   role: Role
   posts: PostUpdateManyWithoutAuthorInput
   wishlist: WishlistUpdateManyWithoutUserIdInput
-  usersCourse: usersCourseUpdateManyWithoutUserIdInput
+  courselist: CourselistUpdateManyWithoutUserIdInput
 }
 
 input UserUpdateOneInput {
@@ -1867,6 +1843,14 @@ input UserUpdateOneInput {
   upsert: UserUpsertNestedInput
 }
 
+input UserUpdateOneWithoutCourselistInput {
+  create: UserCreateWithoutCourselistInput
+  connect: UserWhereUniqueInput
+  delete: Boolean
+  update: UserUpdateWithoutCourselistDataInput
+  upsert: UserUpsertWithoutCourselistInput
+}
+
 input UserUpdateOneWithoutPostsInput {
   create: UserCreateWithoutPostsInput
   connect: UserWhereUniqueInput
@@ -1876,20 +1860,26 @@ input UserUpdateOneWithoutPostsInput {
   upsert: UserUpsertWithoutPostsInput
 }
 
-input UserUpdateOneWithoutUsersCourseInput {
-  create: UserCreateWithoutUsersCourseInput
-  connect: UserWhereUniqueInput
-  delete: Boolean
-  update: UserUpdateWithoutUsersCourseDataInput
-  upsert: UserUpsertWithoutUsersCourseInput
-}
-
 input UserUpdateOneWithoutWishlistInput {
   create: UserCreateWithoutWishlistInput
   connect: UserWhereUniqueInput
   delete: Boolean
   update: UserUpdateWithoutWishlistDataInput
   upsert: UserUpsertWithoutWishlistInput
+}
+
+input UserUpdateWithoutCourselistDataInput {
+  email: String
+  emailvalidated: Boolean
+  validateEmailToken: String
+  password: String
+  nameFile: String
+  resetPasswordToken: String
+  resetPasswordExpires: Float
+  name: String
+  role: Role
+  posts: PostUpdateManyWithoutAuthorInput
+  wishlist: WishlistUpdateManyWithoutUserIdInput
 }
 
 input UserUpdateWithoutPostsDataInput {
@@ -1903,21 +1893,7 @@ input UserUpdateWithoutPostsDataInput {
   name: String
   role: Role
   wishlist: WishlistUpdateManyWithoutUserIdInput
-  usersCourse: usersCourseUpdateManyWithoutUserIdInput
-}
-
-input UserUpdateWithoutUsersCourseDataInput {
-  email: String
-  emailvalidated: Boolean
-  validateEmailToken: String
-  password: String
-  nameFile: String
-  resetPasswordToken: String
-  resetPasswordExpires: Float
-  name: String
-  role: Role
-  posts: PostUpdateManyWithoutAuthorInput
-  wishlist: WishlistUpdateManyWithoutUserIdInput
+  courselist: CourselistUpdateManyWithoutUserIdInput
 }
 
 input UserUpdateWithoutWishlistDataInput {
@@ -1931,7 +1907,7 @@ input UserUpdateWithoutWishlistDataInput {
   name: String
   role: Role
   posts: PostUpdateManyWithoutAuthorInput
-  usersCourse: usersCourseUpdateManyWithoutUserIdInput
+  courselist: CourselistUpdateManyWithoutUserIdInput
 }
 
 input UserUpsertNestedInput {
@@ -1939,14 +1915,14 @@ input UserUpsertNestedInput {
   create: UserCreateInput!
 }
 
+input UserUpsertWithoutCourselistInput {
+  update: UserUpdateWithoutCourselistDataInput!
+  create: UserCreateWithoutCourselistInput!
+}
+
 input UserUpsertWithoutPostsInput {
   update: UserUpdateWithoutPostsDataInput!
   create: UserCreateWithoutPostsInput!
-}
-
-input UserUpsertWithoutUsersCourseInput {
-  update: UserUpdateWithoutUsersCourseDataInput!
-  create: UserCreateWithoutUsersCourseInput!
 }
 
 input UserUpsertWithoutWishlistInput {
@@ -2329,9 +2305,9 @@ input UserWhereInput {
   wishlist_every: WishlistWhereInput
   wishlist_some: WishlistWhereInput
   wishlist_none: WishlistWhereInput
-  usersCourse_every: usersCourseWhereInput
-  usersCourse_some: usersCourseWhereInput
-  usersCourse_none: usersCourseWhereInput
+  courselist_every: CourselistWhereInput
+  courselist_some: CourselistWhereInput
+  courselist_none: CourselistWhereInput
 }
 
 input UserWhereUniqueInput {

@@ -130,31 +130,33 @@ async function deleteWishlist (parent, args, ctx, info) {
   return ctx.db.mutation.deleteWishlist({ where: { id: args.id } })
 }
 
-// async function createusersCourse (parent, args, ctx, info) {
-//   const userId = getUserId(ctx) // requires auth
-//   if (userId !== args.userId) throw new Error("Provided user id is not equal to your profile id")
 
-//   const userExists = await ctx.db.exists.User({
-//     id: args.userId
-//   })
-  
-//   const courseExists = await ctx.db.exists.Post({
-//     id: args.courseId
-//   })
-  
-//   if (!userExists) throw new Error("User cannot be found with this id")
-//   if (!courseExists) throw new Error("Course cannot be found with this id")
+async function createCourselist (parent, args, ctx, info) {
+  const userId = getUserId(ctx) // requires auth
+  if (userId !== args.userId) throw new Error("Provided user id is not equal to your profile id")
 
-//   return ctx.db.mutation.createusersCourse(
-//       {
-//         data: {
-//           courseId: { connect: { id: args.courseId } },
-//           userId: { connect: { id:  args.userId } }
-//         }
-//       },
-//     info
-//   )
-// }
+  const userExists = await ctx.db.exists.User({
+    id: args.userId
+  })
+  
+  const courseExists = await ctx.db.exists.Post({
+    id: args.courseId
+  })
+  
+  if (!userExists) throw new Error("User cannot be found with this id")
+  if (!courseExists) throw new Error("Course cannot be found with this id")
+
+  return ctx.db.mutation.createCourselist(
+      {
+        data: {
+          courseId: { connect: { id: args.courseId } },
+          userId: { connect: { id:  args.userId } }
+        }
+      },
+    info
+  );
+}
+
 
 async function createChat (parent, args, ctx, info) {
   const userId = getUserId(ctx)
@@ -165,6 +167,7 @@ async function createChat (parent, args, ctx, info) {
   }
   return forwardTo('db')(parent, args, ctx, info)
 }
+
 
 async function deletePost (parent, { id }, ctx, info) {
   const userId = getUserId(ctx)
@@ -209,6 +212,7 @@ const Mutation = {
   createChapter,
   createWishlist,
   deleteWishlist,
+  createCourselist
 }
 
 module.exports = {

@@ -36,6 +36,9 @@ type Wishlist {
 
 type Courselist {
   id: ID! @unique
+  courseId: [Post!]!
+  userId: User!
+  createdAt: DateTime!
 }
 
 type Car {
@@ -65,7 +68,7 @@ type User {
   name: String!
   posts: [Post!]!
   wishlist: [Wishlist!]!
-  
+  courselist: [Courselist!]!  
   role: Role! @default(value: "CUSTOMER")
   createdAt: DateTime!
   updatedAt: DateTime!
