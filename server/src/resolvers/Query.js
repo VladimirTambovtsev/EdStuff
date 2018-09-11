@@ -42,8 +42,8 @@ async function post (parent, {id}, ctx, info) {
     }, info)
   }
   throw new Error('Invalid permissions, you must be an admin or the author of this post to retrieve it.',)
-
 }
+
 
 async function wishlist (parent, { userId }, ctx, info) {
   const userExists = await ctx.db.exists.User({
@@ -80,6 +80,7 @@ async function courselist (parent, { userId }, ctx, info) {
     }
   }, info)
 }
+
 
 const Query = {
   me,

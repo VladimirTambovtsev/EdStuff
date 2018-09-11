@@ -25,7 +25,7 @@ class CarsPageList extends React.Component {
     return (
       <React.Fragment>
         {this.props.showTitle && (
-          <h1>Cars ({edges.length}/{aggregate.count})</h1>
+          <h1>Разделы ({edges.length}/{aggregate.count})</h1>
         )}
         {edges && edges.map(car => (<Car key={car.node.id} elemClicked={this.props.elemClicked} car={car.node}/>))}
 

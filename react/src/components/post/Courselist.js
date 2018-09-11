@@ -20,57 +20,32 @@ class Courselist extends React.Component {
         <div className='paperOut'>
           <Paper className='paperIn'>
           <h1>Мои Курсы</h1>
-        
+          
+          <Query query={COURSELIST_QUERY} variables={{ userId }} >
+            {({ loading, error, data }) => {
+              if (loading) return <Loading />;
+              if (error) { console.log(error); return `Error!`; }
 
-        <Query query={COURSELIST_QUERY} variables={{ userId }} >
-          {({ loading, error, data }) => {
-            if (loading) return <Loading />;
-            if (error) { console.log(error); return `Error!`; }
-
-            return (
-              <ul>
-              {/* Must be refactored */}
-                {
-                  data.courselist.map(courselist => (
-                    courselist.courseId.map(course => (
-                        <Post
-                          key={course.id}
-                          post={course}
-                          refresh={() => this.props.courselist.refetch()}
-                        />
+              return (
+                <ul>
+                {/* Must be refactored */}
+                  {
+                    data.courselist.map(courselist => (
+                      courselist.courseId.map(course => (
+                          <Post
+                            key={course.id}
+                            post={course}
+                            refresh={() => this.props.courselist.refetch()}
+                          />
+                        )
                       )
                     )
                   )
-                )
-                }
-
-
-                {
-                //   <Post
-                //   key={post.id}
-                //   post={post}
-                //   refresh={() => this.props.courselist.refetch()}
-                //   isDraft={!post.isPublished}
-                // />
-                }
-              </ul>
-            );
-          }}
-        </Query>
-        {
-        	/*
-        	this.props.courselist.courseId &&
-          this.props.courselist.courseId.map(post => (
-            <Post
-              key={post.id}
-              post={post}
-              refresh={() => this.props.courselist.refetch()}
-              isDraft={!post.isPublished}
-            />
-          ))
-        	*/
-     	}
-        {this.props.children}
+                  }
+                </ul>
+              );
+            }}
+          </Query>
         </Paper>
         </div>
       </React.Fragment>

@@ -27,6 +27,14 @@ type Chapter {
   createdAt: DateTime!
 }
 
+type ChapterDescription {
+  id: ID! @unique
+  chapterId: Chapter!
+  text: String!
+  createdAt: DateTime!
+}
+
+
 type Wishlist {
   id: ID! @unique
   courseId: [Post!]!

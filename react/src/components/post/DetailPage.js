@@ -41,7 +41,6 @@ class DetailPage extends React.Component {
 
     const { post } = this.props.postQuery
     let action = this._renderAction(post)
-    console.log('post:', post);    
     
     return (
       <React.Fragment>
@@ -67,18 +66,12 @@ class DetailPage extends React.Component {
             {action}
 
             {post.chapters.map((chapter, index) => (
-              <Paper className="paperIn mt2" key={chapter.id}>
-                <h3>{++index} - {chapter.name}</h3>  <br/>
-                Description (should be array: many texts for chapter) <br/>
-                {chapter.description ? chapter.description : "No description"} <br/>
-                Files: (
-                  { chapter.files } <br/>
-                  <ImageTemplate
-                    nameFile={chapter.files}
-                  />
-                )
-                {chapter.createdAt} <br/>
-              </Paper>
+              <Link to={this.props.history.location.pathname + "/lecture/" + chapter.id} key={chapter.id} >
+                <Paper className="paperIn mt2">
+                  <h3>{++index} - {chapter.name}</h3>  <br/>
+                  {chapter.createdAt} <br/>
+                </Paper>
+              </Link>
             ))}
 
           </Paper>
@@ -134,7 +127,11 @@ class DetailPage extends React.Component {
     }
     return (
       <div>
-        <Button variant="contained" color="primary">
+        <Button 
+          variant="contained" 
+          color="primary"
+          onClick={() => this.createCourselist(id, author.id)} 
+        >
           Начать
         </Button>
         
@@ -182,12 +179,22 @@ class DetailPage extends React.Component {
     })
   }
 
+  createCourselist = async (courseId, userId) => {
+    await this.props.createCourselist({
+      variables: { courseId, userId },
+    })
+    this.props.history.replace('/courses/my')
+  }
+
+  /* Activate when courses will be paid */
+  /*  
   addToWishlist = async (courseId, userId) => {
     await this.props.createWishlist({
       variables: { courseId, userId },
     })
     this.props.history.replace('/')
   }
+  */
 
 }
 
@@ -210,8 +217,6 @@ const POST_QUERY = gql`
       chapters{
         id
         name
-        description
-        files
         createdAt
       }
     }
@@ -238,6 +243,33 @@ const CREATE_CHAPTER_MUTATION = gql`
 }
 `;
 
+
+const ADD_TO_MYCOURSES = gql`
+  mutation createCourselist($userId:ID!, $courseId:ID!){
+    createCourselist(userId:$userId, courseId:$courseId){
+      courseId{
+        id
+        title
+        text
+      }
+      userId{
+        id
+        name
+      }
+      createdAt
+    }
+  }
+`
+
+const DELETE_MUTATION = gql`
+  mutation deletePost($id: ID!) {
+    deletePost(id: $id) {
+      id
+    }
+  }
+`
+
+/*
 const ADD_TO_WISHLIST_MUTATION = gql`
   mutation createWishlist($courseId:ID!, $userId:ID!) {
     createWishlist(courseId:$courseId, userId:$userId){
@@ -252,14 +284,7 @@ const ADD_TO_WISHLIST_MUTATION = gql`
     }
   }
 `
-
-const DELETE_MUTATION = gql`
-  mutation deletePost($id: ID!) {
-    deletePost(id: $id) {
-      id
-    }
-  }
-`
+*/
 
 
 
@@ -278,11 +303,14 @@ export default compose(
   graphql(CREATE_CHAPTER_MUTATION, {
     name: 'createChapter'
   }),
-  graphql(ADD_TO_WISHLIST_MUTATION, {
-    name: 'createWishlist',
+  graphql(ADD_TO_MYCOURSES, {
+    name: 'createCourselist'
   }),
   graphql(DELETE_MUTATION, {
     name: 'deletePost',
   }),
+  // graphql(ADD_TO_WISHLIST_MUTATION, {
+  //   name: 'createWishlist',
+  // }),
   withRouter,
 )(DetailPage)

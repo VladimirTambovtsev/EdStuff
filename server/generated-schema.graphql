@@ -1,11 +1,15 @@
 # source: http://localhost:4466
-# timestamp: Mon Sep 10 2018 14:57:40 GMT+0300 (MSK)
+# timestamp: Tue Sep 11 2018 13:36:09 GMT+0300 (MSK)
 
 type AggregateCar {
   count: Int!
 }
 
 type AggregateChapter {
+  count: Int!
+}
+
+type AggregateChapterDescription {
   count: Int!
 }
 
@@ -304,6 +308,212 @@ input ChapterCreateWithoutCourseByInput {
   name: String!
   description: String
   files: String
+}
+
+type ChapterDescription implements Node {
+  id: ID!
+  text: String!
+  createdAt: DateTime!
+}
+
+"""A connection to a list of items."""
+type ChapterDescriptionConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [ChapterDescriptionEdge]!
+  aggregate: AggregateChapterDescription!
+}
+
+input ChapterDescriptionCreateInput {
+  text: String!
+}
+
+"""An edge in a connection."""
+type ChapterDescriptionEdge {
+  """The item at the end of the edge."""
+  node: ChapterDescription!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum ChapterDescriptionOrderByInput {
+  id_ASC
+  id_DESC
+  text_ASC
+  text_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type ChapterDescriptionPreviousValues {
+  id: ID!
+  text: String!
+  createdAt: DateTime!
+}
+
+type ChapterDescriptionSubscriptionPayload {
+  mutation: MutationType!
+  node: ChapterDescription
+  updatedFields: [String!]
+  previousValues: ChapterDescriptionPreviousValues
+}
+
+input ChapterDescriptionSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [ChapterDescriptionSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [ChapterDescriptionSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ChapterDescriptionSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: ChapterDescriptionWhereInput
+}
+
+input ChapterDescriptionUpdateInput {
+  text: String
+}
+
+input ChapterDescriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [ChapterDescriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [ChapterDescriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ChapterDescriptionWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  text: String
+
+  """All values that are not equal to given value."""
+  text_not: String
+
+  """All values that are contained in given list."""
+  text_in: [String!]
+
+  """All values that are not contained in given list."""
+  text_not_in: [String!]
+
+  """All values less than the given value."""
+  text_lt: String
+
+  """All values less than or equal the given value."""
+  text_lte: String
+
+  """All values greater than the given value."""
+  text_gt: String
+
+  """All values greater than or equal the given value."""
+  text_gte: String
+
+  """All values containing the given string."""
+  text_contains: String
+
+  """All values not containing the given string."""
+  text_not_contains: String
+
+  """All values starting with the given string."""
+  text_starts_with: String
+
+  """All values not starting with the given string."""
+  text_not_starts_with: String
+
+  """All values ending with the given string."""
+  text_ends_with: String
+
+  """All values not ending with the given string."""
+  text_not_ends_with: String
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+}
+
+input ChapterDescriptionWhereUniqueInput {
+  id: ID
 }
 
 """An edge in a connection."""
@@ -1056,6 +1266,7 @@ scalar Long
 type Mutation {
   createPost(data: PostCreateInput!): Post!
   createChapter(data: ChapterCreateInput!): Chapter!
+  createChapterDescription(data: ChapterDescriptionCreateInput!): ChapterDescription!
   createWishlist(data: WishlistCreateInput!): Wishlist!
   createCourselist(data: CourselistCreateInput!): Courselist!
   createCar(data: CarCreateInput!): Car!
@@ -1063,6 +1274,7 @@ type Mutation {
   createUser(data: UserCreateInput!): User!
   updatePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post
   updateChapter(data: ChapterUpdateInput!, where: ChapterWhereUniqueInput!): Chapter
+  updateChapterDescription(data: ChapterDescriptionUpdateInput!, where: ChapterDescriptionWhereUniqueInput!): ChapterDescription
   updateWishlist(data: WishlistUpdateInput!, where: WishlistWhereUniqueInput!): Wishlist
   updateCourselist(data: CourselistUpdateInput!, where: CourselistWhereUniqueInput!): Courselist
   updateCar(data: CarUpdateInput!, where: CarWhereUniqueInput!): Car
@@ -1070,6 +1282,7 @@ type Mutation {
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   deletePost(where: PostWhereUniqueInput!): Post
   deleteChapter(where: ChapterWhereUniqueInput!): Chapter
+  deleteChapterDescription(where: ChapterDescriptionWhereUniqueInput!): ChapterDescription
   deleteWishlist(where: WishlistWhereUniqueInput!): Wishlist
   deleteCourselist(where: CourselistWhereUniqueInput!): Courselist
   deleteCar(where: CarWhereUniqueInput!): Car
@@ -1077,6 +1290,7 @@ type Mutation {
   deleteUser(where: UserWhereUniqueInput!): User
   upsertPost(where: PostWhereUniqueInput!, create: PostCreateInput!, update: PostUpdateInput!): Post!
   upsertChapter(where: ChapterWhereUniqueInput!, create: ChapterCreateInput!, update: ChapterUpdateInput!): Chapter!
+  upsertChapterDescription(where: ChapterDescriptionWhereUniqueInput!, create: ChapterDescriptionCreateInput!, update: ChapterDescriptionUpdateInput!): ChapterDescription!
   upsertWishlist(where: WishlistWhereUniqueInput!, create: WishlistCreateInput!, update: WishlistUpdateInput!): Wishlist!
   upsertCourselist(where: CourselistWhereUniqueInput!, create: CourselistCreateInput!, update: CourselistUpdateInput!): Courselist!
   upsertCar(where: CarWhereUniqueInput!, create: CarCreateInput!, update: CarUpdateInput!): Car!
@@ -1084,6 +1298,7 @@ type Mutation {
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   updateManyPosts(data: PostUpdateInput!, where: PostWhereInput): BatchPayload!
   updateManyChapters(data: ChapterUpdateInput!, where: ChapterWhereInput): BatchPayload!
+  updateManyChapterDescriptions(data: ChapterDescriptionUpdateInput!, where: ChapterDescriptionWhereInput): BatchPayload!
   updateManyWishlists(data: WishlistUpdateInput!, where: WishlistWhereInput): BatchPayload!
   updateManyCourselists(data: CourselistUpdateInput!, where: CourselistWhereInput): BatchPayload!
   updateManyCars(data: CarUpdateInput!, where: CarWhereInput): BatchPayload!
@@ -1091,6 +1306,7 @@ type Mutation {
   updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
   deleteManyPosts(where: PostWhereInput): BatchPayload!
   deleteManyChapters(where: ChapterWhereInput): BatchPayload!
+  deleteManyChapterDescriptions(where: ChapterDescriptionWhereInput): BatchPayload!
   deleteManyWishlists(where: WishlistWhereInput): BatchPayload!
   deleteManyCourselists(where: CourselistWhereInput): BatchPayload!
   deleteManyCars(where: CarWhereInput): BatchPayload!
@@ -1567,6 +1783,7 @@ input PostWhereUniqueInput {
 type Query {
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post]!
   chapters(where: ChapterWhereInput, orderBy: ChapterOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Chapter]!
+  chapterDescriptions(where: ChapterDescriptionWhereInput, orderBy: ChapterDescriptionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ChapterDescription]!
   wishlists(where: WishlistWhereInput, orderBy: WishlistOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Wishlist]!
   courselists(where: CourselistWhereInput, orderBy: CourselistOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Courselist]!
   cars(where: CarWhereInput, orderBy: CarOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Car]!
@@ -1574,6 +1791,7 @@ type Query {
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   post(where: PostWhereUniqueInput!): Post
   chapter(where: ChapterWhereUniqueInput!): Chapter
+  chapterDescription(where: ChapterDescriptionWhereUniqueInput!): ChapterDescription
   wishlist(where: WishlistWhereUniqueInput!): Wishlist
   courselist(where: CourselistWhereUniqueInput!): Courselist
   car(where: CarWhereUniqueInput!): Car
@@ -1581,6 +1799,7 @@ type Query {
   user(where: UserWhereUniqueInput!): User
   postsConnection(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PostConnection!
   chaptersConnection(where: ChapterWhereInput, orderBy: ChapterOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ChapterConnection!
+  chapterDescriptionsConnection(where: ChapterDescriptionWhereInput, orderBy: ChapterDescriptionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ChapterDescriptionConnection!
   wishlistsConnection(where: WishlistWhereInput, orderBy: WishlistOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): WishlistConnection!
   courselistsConnection(where: CourselistWhereInput, orderBy: CourselistOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CourselistConnection!
   carsConnection(where: CarWhereInput, orderBy: CarOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CarConnection!
@@ -1602,6 +1821,7 @@ enum Role {
 type Subscription {
   post(where: PostSubscriptionWhereInput): PostSubscriptionPayload
   chapter(where: ChapterSubscriptionWhereInput): ChapterSubscriptionPayload
+  chapterDescription(where: ChapterDescriptionSubscriptionWhereInput): ChapterDescriptionSubscriptionPayload
   wishlist(where: WishlistSubscriptionWhereInput): WishlistSubscriptionPayload
   courselist(where: CourselistSubscriptionWhereInput): CourselistSubscriptionPayload
   car(where: CarSubscriptionWhereInput): CarSubscriptionPayload

@@ -7,6 +7,7 @@ import CourselistContainer from '../../post/CourselistContainer'
 import CreateCar from '../../car/CreateCar'
 import CreatePage from '../../post/CreatePage'
 import DetailPage from '../../post/DetailPage'
+import Lecture from '../../post/Lecture'
 import DetailCar from '../../car/DetailCar'
 import UsersPage from '../../user/UsersPage'
 import UserPageCreate from '../../user/UserPageCreate'
@@ -91,7 +92,8 @@ class App extends Component {
                 <Route path='/user/:id' component={UserPage} />
                 {/*<Route path='/api' component={Api} />*/}
                 <Route path='/create' component={CreatePage} />
-                <Route path='/post/:id' component={DetailPage} />
+                <Route exact path='/post/:id' component={DetailPage} />
+                <Route exact path='/post/:id/lecture/:lectureId' component={Lecture} />
                 <Route path='/login' component={Login} />
                 <Route path='/signup' component={Signup} />
                 <Route path='/forgetPassword' component={ForgetPassword} />

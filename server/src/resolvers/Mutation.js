@@ -157,6 +157,8 @@ async function createCourselist (parent, args, ctx, info) {
   );
 }
 
+// async function createChapterDescription (parent, args, ctx, info) {  }
+
 
 async function createChat (parent, args, ctx, info) {
   const userId = getUserId(ctx)
