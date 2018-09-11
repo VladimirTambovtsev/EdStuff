@@ -135,17 +135,19 @@ class DetailPage extends React.Component {
     return (
       <div>
         <Button variant="contained" color="primary">
-          Купить
+          Начать
         </Button>
-        <Button 
-          variant="outlined" 
-          color="primary"
-          onClick={() => this.addToWishlist(id, author.id)} 
-        >
+        
+        {/* Activate when courses will be paid
+          <Button 
+            variant="outlined" 
+            color="primary"
+            onClick={() => this.addToWishlist(id, author.id)} 
+          >
           В список желаемого
-          { console.log("id: ", id) }
-          { console.log("user: ", author) }
         </Button>
+        */}
+
       </div>
     )
   }

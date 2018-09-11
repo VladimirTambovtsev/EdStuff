@@ -19,7 +19,7 @@ class Courselist extends React.Component {
       <React.Fragment>
         <div className='paperOut'>
           <Paper className='paperIn'>
-          <h1>Курсы</h1>
+          <h1>Мои Курсы</h1>
         
 
         <Query query={COURSELIST_QUERY} variables={{ userId }} >
@@ -29,19 +29,20 @@ class Courselist extends React.Component {
 
             return (
               <ul>
-                {/* Must be refactored */}
-
-                {data.courselist.map(courselist => {
-                    courselist.courseId.map((course, index) => {
-                      console.log(Object.values(course))
-                      return (
-                        <li key={index}>
-                          {course.title}
-                        </li>
+              {/* Must be refactored */}
+                {
+                  data.courselist.map(courselist => (
+                    courselist.courseId.map(course => (
+                        <Post
+                          key={course.id}
+                          post={course}
+                          refresh={() => this.props.courselist.refetch()}
+                        />
                       )
-                    })
-                  }
-                )}
+                    )
+                  )
+                )
+                }
 
 
                 {
@@ -84,6 +85,13 @@ const COURSELIST_QUERY = gql`
       courseId{
         id
         title
+        text
+        isPublished
+        nameFile
+        cars {
+          id
+          name
+        }
       }
     }
   }
