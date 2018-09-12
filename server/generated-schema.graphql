@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Tue Sep 11 2018 13:36:09 GMT+0300 (MSK)
+# timestamp: Wed Sep 12 2018 14:23:16 GMT+0300 (MSK)
 
 type AggregateCar {
   count: Int!
@@ -10,6 +10,10 @@ type AggregateChapter {
 }
 
 type AggregateChapterDescription {
+  count: Int!
+}
+
+type AggregateChapterFile {
   count: Int!
 }
 
@@ -276,9 +280,9 @@ input CarWhereUniqueInput {
 type Chapter implements Node {
   id: ID!
   name: String!
-  description: String
   courseBy(where: PostWhereInput): Post
-  files: String
+  description(where: ChapterDescriptionWhereInput, orderBy: ChapterDescriptionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ChapterDescription!]
+  files(where: ChapterFileWhereInput, orderBy: ChapterFileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ChapterFile!]
   createdAt: DateTime!
 }
 
@@ -294,9 +298,9 @@ type ChapterConnection {
 
 input ChapterCreateInput {
   name: String!
-  description: String
-  files: String
   courseBy: PostCreateOneWithoutChaptersInput
+  description: ChapterDescriptionCreateManyWithoutChapterIdInput
+  files: ChapterFileCreateManyWithoutChapterIdInput
 }
 
 input ChapterCreateManyWithoutCourseByInput {
@@ -304,14 +308,38 @@ input ChapterCreateManyWithoutCourseByInput {
   connect: [ChapterWhereUniqueInput!]
 }
 
+input ChapterCreateOneWithoutDescriptionInput {
+  create: ChapterCreateWithoutDescriptionInput
+  connect: ChapterWhereUniqueInput
+}
+
+input ChapterCreateOneWithoutFilesInput {
+  create: ChapterCreateWithoutFilesInput
+  connect: ChapterWhereUniqueInput
+}
+
 input ChapterCreateWithoutCourseByInput {
   name: String!
-  description: String
-  files: String
+  description: ChapterDescriptionCreateManyWithoutChapterIdInput
+  files: ChapterFileCreateManyWithoutChapterIdInput
+}
+
+input ChapterCreateWithoutDescriptionInput {
+  name: String!
+  courseBy: PostCreateOneWithoutChaptersInput
+  files: ChapterFileCreateManyWithoutChapterIdInput
+}
+
+input ChapterCreateWithoutFilesInput {
+  name: String!
+  courseBy: PostCreateOneWithoutChaptersInput
+  description: ChapterDescriptionCreateManyWithoutChapterIdInput
 }
 
 type ChapterDescription implements Node {
   id: ID!
+  chapterId(where: ChapterWhereInput): Chapter!
+  title: String
   text: String!
   createdAt: DateTime!
 }
@@ -327,6 +355,18 @@ type ChapterDescriptionConnection {
 }
 
 input ChapterDescriptionCreateInput {
+  title: String
+  text: String!
+  chapterId: ChapterCreateOneWithoutDescriptionInput!
+}
+
+input ChapterDescriptionCreateManyWithoutChapterIdInput {
+  create: [ChapterDescriptionCreateWithoutChapterIdInput!]
+  connect: [ChapterDescriptionWhereUniqueInput!]
+}
+
+input ChapterDescriptionCreateWithoutChapterIdInput {
+  title: String
   text: String!
 }
 
@@ -342,6 +382,8 @@ type ChapterDescriptionEdge {
 enum ChapterDescriptionOrderByInput {
   id_ASC
   id_DESC
+  title_ASC
+  title_DESC
   text_ASC
   text_DESC
   createdAt_ASC
@@ -352,6 +394,7 @@ enum ChapterDescriptionOrderByInput {
 
 type ChapterDescriptionPreviousValues {
   id: ID!
+  title: String
   text: String!
   createdAt: DateTime!
 }
@@ -396,7 +439,34 @@ input ChapterDescriptionSubscriptionWhereInput {
 }
 
 input ChapterDescriptionUpdateInput {
+  title: String
   text: String
+  chapterId: ChapterUpdateOneWithoutDescriptionInput
+}
+
+input ChapterDescriptionUpdateManyWithoutChapterIdInput {
+  create: [ChapterDescriptionCreateWithoutChapterIdInput!]
+  connect: [ChapterDescriptionWhereUniqueInput!]
+  disconnect: [ChapterDescriptionWhereUniqueInput!]
+  delete: [ChapterDescriptionWhereUniqueInput!]
+  update: [ChapterDescriptionUpdateWithWhereUniqueWithoutChapterIdInput!]
+  upsert: [ChapterDescriptionUpsertWithWhereUniqueWithoutChapterIdInput!]
+}
+
+input ChapterDescriptionUpdateWithoutChapterIdDataInput {
+  title: String
+  text: String
+}
+
+input ChapterDescriptionUpdateWithWhereUniqueWithoutChapterIdInput {
+  where: ChapterDescriptionWhereUniqueInput!
+  data: ChapterDescriptionUpdateWithoutChapterIdDataInput!
+}
+
+input ChapterDescriptionUpsertWithWhereUniqueWithoutChapterIdInput {
+  where: ChapterDescriptionWhereUniqueInput!
+  update: ChapterDescriptionUpdateWithoutChapterIdDataInput!
+  create: ChapterDescriptionCreateWithoutChapterIdInput!
 }
 
 input ChapterDescriptionWhereInput {
@@ -448,6 +518,46 @@ input ChapterDescriptionWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
+  title: String
+
+  """All values that are not equal to given value."""
+  title_not: String
+
+  """All values that are contained in given list."""
+  title_in: [String!]
+
+  """All values that are not contained in given list."""
+  title_not_in: [String!]
+
+  """All values less than the given value."""
+  title_lt: String
+
+  """All values less than or equal the given value."""
+  title_lte: String
+
+  """All values greater than the given value."""
+  title_gt: String
+
+  """All values greater than or equal the given value."""
+  title_gte: String
+
+  """All values containing the given string."""
+  title_contains: String
+
+  """All values not containing the given string."""
+  title_not_contains: String
+
+  """All values starting with the given string."""
+  title_starts_with: String
+
+  """All values not starting with the given string."""
+  title_not_starts_with: String
+
+  """All values ending with the given string."""
+  title_ends_with: String
+
+  """All values not ending with the given string."""
+  title_not_ends_with: String
   text: String
 
   """All values that are not equal to given value."""
@@ -510,6 +620,7 @@ input ChapterDescriptionWhereInput {
 
   """All values greater than or equal the given value."""
   createdAt_gte: DateTime
+  chapterId: ChapterWhereInput
 }
 
 input ChapterDescriptionWhereUniqueInput {
@@ -525,15 +636,302 @@ type ChapterEdge {
   cursor: String!
 }
 
+type ChapterFile implements Node {
+  id: ID!
+  chapterId(where: ChapterWhereInput): Chapter!
+  title: String!
+  src: String!
+  createdAt: DateTime!
+}
+
+"""A connection to a list of items."""
+type ChapterFileConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [ChapterFileEdge]!
+  aggregate: AggregateChapterFile!
+}
+
+input ChapterFileCreateInput {
+  title: String!
+  src: String!
+  chapterId: ChapterCreateOneWithoutFilesInput!
+}
+
+input ChapterFileCreateManyWithoutChapterIdInput {
+  create: [ChapterFileCreateWithoutChapterIdInput!]
+  connect: [ChapterFileWhereUniqueInput!]
+}
+
+input ChapterFileCreateWithoutChapterIdInput {
+  title: String!
+  src: String!
+}
+
+"""An edge in a connection."""
+type ChapterFileEdge {
+  """The item at the end of the edge."""
+  node: ChapterFile!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum ChapterFileOrderByInput {
+  id_ASC
+  id_DESC
+  title_ASC
+  title_DESC
+  src_ASC
+  src_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type ChapterFilePreviousValues {
+  id: ID!
+  title: String!
+  src: String!
+  createdAt: DateTime!
+}
+
+type ChapterFileSubscriptionPayload {
+  mutation: MutationType!
+  node: ChapterFile
+  updatedFields: [String!]
+  previousValues: ChapterFilePreviousValues
+}
+
+input ChapterFileSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [ChapterFileSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [ChapterFileSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ChapterFileSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: ChapterFileWhereInput
+}
+
+input ChapterFileUpdateInput {
+  title: String
+  src: String
+  chapterId: ChapterUpdateOneWithoutFilesInput
+}
+
+input ChapterFileUpdateManyWithoutChapterIdInput {
+  create: [ChapterFileCreateWithoutChapterIdInput!]
+  connect: [ChapterFileWhereUniqueInput!]
+  disconnect: [ChapterFileWhereUniqueInput!]
+  delete: [ChapterFileWhereUniqueInput!]
+  update: [ChapterFileUpdateWithWhereUniqueWithoutChapterIdInput!]
+  upsert: [ChapterFileUpsertWithWhereUniqueWithoutChapterIdInput!]
+}
+
+input ChapterFileUpdateWithoutChapterIdDataInput {
+  title: String
+  src: String
+}
+
+input ChapterFileUpdateWithWhereUniqueWithoutChapterIdInput {
+  where: ChapterFileWhereUniqueInput!
+  data: ChapterFileUpdateWithoutChapterIdDataInput!
+}
+
+input ChapterFileUpsertWithWhereUniqueWithoutChapterIdInput {
+  where: ChapterFileWhereUniqueInput!
+  update: ChapterFileUpdateWithoutChapterIdDataInput!
+  create: ChapterFileCreateWithoutChapterIdInput!
+}
+
+input ChapterFileWhereInput {
+  """Logical AND on all given filters."""
+  AND: [ChapterFileWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [ChapterFileWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ChapterFileWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  title: String
+
+  """All values that are not equal to given value."""
+  title_not: String
+
+  """All values that are contained in given list."""
+  title_in: [String!]
+
+  """All values that are not contained in given list."""
+  title_not_in: [String!]
+
+  """All values less than the given value."""
+  title_lt: String
+
+  """All values less than or equal the given value."""
+  title_lte: String
+
+  """All values greater than the given value."""
+  title_gt: String
+
+  """All values greater than or equal the given value."""
+  title_gte: String
+
+  """All values containing the given string."""
+  title_contains: String
+
+  """All values not containing the given string."""
+  title_not_contains: String
+
+  """All values starting with the given string."""
+  title_starts_with: String
+
+  """All values not starting with the given string."""
+  title_not_starts_with: String
+
+  """All values ending with the given string."""
+  title_ends_with: String
+
+  """All values not ending with the given string."""
+  title_not_ends_with: String
+  src: String
+
+  """All values that are not equal to given value."""
+  src_not: String
+
+  """All values that are contained in given list."""
+  src_in: [String!]
+
+  """All values that are not contained in given list."""
+  src_not_in: [String!]
+
+  """All values less than the given value."""
+  src_lt: String
+
+  """All values less than or equal the given value."""
+  src_lte: String
+
+  """All values greater than the given value."""
+  src_gt: String
+
+  """All values greater than or equal the given value."""
+  src_gte: String
+
+  """All values containing the given string."""
+  src_contains: String
+
+  """All values not containing the given string."""
+  src_not_contains: String
+
+  """All values starting with the given string."""
+  src_starts_with: String
+
+  """All values not starting with the given string."""
+  src_not_starts_with: String
+
+  """All values ending with the given string."""
+  src_ends_with: String
+
+  """All values not ending with the given string."""
+  src_not_ends_with: String
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  chapterId: ChapterWhereInput
+}
+
+input ChapterFileWhereUniqueInput {
+  id: ID
+}
+
 enum ChapterOrderByInput {
   id_ASC
   id_DESC
   name_ASC
   name_DESC
-  description_ASC
-  description_DESC
-  files_ASC
-  files_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -543,8 +941,6 @@ enum ChapterOrderByInput {
 type ChapterPreviousValues {
   id: ID!
   name: String!
-  description: String
-  files: String
   createdAt: DateTime!
 }
 
@@ -589,9 +985,9 @@ input ChapterSubscriptionWhereInput {
 
 input ChapterUpdateInput {
   name: String
-  description: String
-  files: String
   courseBy: PostUpdateOneWithoutChaptersInput
+  description: ChapterDescriptionUpdateManyWithoutChapterIdInput
+  files: ChapterFileUpdateManyWithoutChapterIdInput
 }
 
 input ChapterUpdateManyWithoutCourseByInput {
@@ -603,15 +999,53 @@ input ChapterUpdateManyWithoutCourseByInput {
   upsert: [ChapterUpsertWithWhereUniqueWithoutCourseByInput!]
 }
 
+input ChapterUpdateOneWithoutDescriptionInput {
+  create: ChapterCreateWithoutDescriptionInput
+  connect: ChapterWhereUniqueInput
+  delete: Boolean
+  update: ChapterUpdateWithoutDescriptionDataInput
+  upsert: ChapterUpsertWithoutDescriptionInput
+}
+
+input ChapterUpdateOneWithoutFilesInput {
+  create: ChapterCreateWithoutFilesInput
+  connect: ChapterWhereUniqueInput
+  delete: Boolean
+  update: ChapterUpdateWithoutFilesDataInput
+  upsert: ChapterUpsertWithoutFilesInput
+}
+
 input ChapterUpdateWithoutCourseByDataInput {
   name: String
-  description: String
-  files: String
+  description: ChapterDescriptionUpdateManyWithoutChapterIdInput
+  files: ChapterFileUpdateManyWithoutChapterIdInput
+}
+
+input ChapterUpdateWithoutDescriptionDataInput {
+  name: String
+  courseBy: PostUpdateOneWithoutChaptersInput
+  files: ChapterFileUpdateManyWithoutChapterIdInput
+}
+
+input ChapterUpdateWithoutFilesDataInput {
+  name: String
+  courseBy: PostUpdateOneWithoutChaptersInput
+  description: ChapterDescriptionUpdateManyWithoutChapterIdInput
 }
 
 input ChapterUpdateWithWhereUniqueWithoutCourseByInput {
   where: ChapterWhereUniqueInput!
   data: ChapterUpdateWithoutCourseByDataInput!
+}
+
+input ChapterUpsertWithoutDescriptionInput {
+  update: ChapterUpdateWithoutDescriptionDataInput!
+  create: ChapterCreateWithoutDescriptionInput!
+}
+
+input ChapterUpsertWithoutFilesInput {
+  update: ChapterUpdateWithoutFilesDataInput!
+  create: ChapterCreateWithoutFilesInput!
 }
 
 input ChapterUpsertWithWhereUniqueWithoutCourseByInput {
@@ -709,86 +1143,6 @@ input ChapterWhereInput {
 
   """All values not ending with the given string."""
   name_not_ends_with: String
-  description: String
-
-  """All values that are not equal to given value."""
-  description_not: String
-
-  """All values that are contained in given list."""
-  description_in: [String!]
-
-  """All values that are not contained in given list."""
-  description_not_in: [String!]
-
-  """All values less than the given value."""
-  description_lt: String
-
-  """All values less than or equal the given value."""
-  description_lte: String
-
-  """All values greater than the given value."""
-  description_gt: String
-
-  """All values greater than or equal the given value."""
-  description_gte: String
-
-  """All values containing the given string."""
-  description_contains: String
-
-  """All values not containing the given string."""
-  description_not_contains: String
-
-  """All values starting with the given string."""
-  description_starts_with: String
-
-  """All values not starting with the given string."""
-  description_not_starts_with: String
-
-  """All values ending with the given string."""
-  description_ends_with: String
-
-  """All values not ending with the given string."""
-  description_not_ends_with: String
-  files: String
-
-  """All values that are not equal to given value."""
-  files_not: String
-
-  """All values that are contained in given list."""
-  files_in: [String!]
-
-  """All values that are not contained in given list."""
-  files_not_in: [String!]
-
-  """All values less than the given value."""
-  files_lt: String
-
-  """All values less than or equal the given value."""
-  files_lte: String
-
-  """All values greater than the given value."""
-  files_gt: String
-
-  """All values greater than or equal the given value."""
-  files_gte: String
-
-  """All values containing the given string."""
-  files_contains: String
-
-  """All values not containing the given string."""
-  files_not_contains: String
-
-  """All values starting with the given string."""
-  files_starts_with: String
-
-  """All values not starting with the given string."""
-  files_not_starts_with: String
-
-  """All values ending with the given string."""
-  files_ends_with: String
-
-  """All values not ending with the given string."""
-  files_not_ends_with: String
   createdAt: DateTime
 
   """All values that are not equal to given value."""
@@ -812,6 +1166,12 @@ input ChapterWhereInput {
   """All values greater than or equal the given value."""
   createdAt_gte: DateTime
   courseBy: PostWhereInput
+  description_every: ChapterDescriptionWhereInput
+  description_some: ChapterDescriptionWhereInput
+  description_none: ChapterDescriptionWhereInput
+  files_every: ChapterFileWhereInput
+  files_some: ChapterFileWhereInput
+  files_none: ChapterFileWhereInput
 }
 
 input ChapterWhereUniqueInput {
@@ -1267,6 +1627,7 @@ type Mutation {
   createPost(data: PostCreateInput!): Post!
   createChapter(data: ChapterCreateInput!): Chapter!
   createChapterDescription(data: ChapterDescriptionCreateInput!): ChapterDescription!
+  createChapterFile(data: ChapterFileCreateInput!): ChapterFile!
   createWishlist(data: WishlistCreateInput!): Wishlist!
   createCourselist(data: CourselistCreateInput!): Courselist!
   createCar(data: CarCreateInput!): Car!
@@ -1275,6 +1636,7 @@ type Mutation {
   updatePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post
   updateChapter(data: ChapterUpdateInput!, where: ChapterWhereUniqueInput!): Chapter
   updateChapterDescription(data: ChapterDescriptionUpdateInput!, where: ChapterDescriptionWhereUniqueInput!): ChapterDescription
+  updateChapterFile(data: ChapterFileUpdateInput!, where: ChapterFileWhereUniqueInput!): ChapterFile
   updateWishlist(data: WishlistUpdateInput!, where: WishlistWhereUniqueInput!): Wishlist
   updateCourselist(data: CourselistUpdateInput!, where: CourselistWhereUniqueInput!): Courselist
   updateCar(data: CarUpdateInput!, where: CarWhereUniqueInput!): Car
@@ -1283,6 +1645,7 @@ type Mutation {
   deletePost(where: PostWhereUniqueInput!): Post
   deleteChapter(where: ChapterWhereUniqueInput!): Chapter
   deleteChapterDescription(where: ChapterDescriptionWhereUniqueInput!): ChapterDescription
+  deleteChapterFile(where: ChapterFileWhereUniqueInput!): ChapterFile
   deleteWishlist(where: WishlistWhereUniqueInput!): Wishlist
   deleteCourselist(where: CourselistWhereUniqueInput!): Courselist
   deleteCar(where: CarWhereUniqueInput!): Car
@@ -1291,6 +1654,7 @@ type Mutation {
   upsertPost(where: PostWhereUniqueInput!, create: PostCreateInput!, update: PostUpdateInput!): Post!
   upsertChapter(where: ChapterWhereUniqueInput!, create: ChapterCreateInput!, update: ChapterUpdateInput!): Chapter!
   upsertChapterDescription(where: ChapterDescriptionWhereUniqueInput!, create: ChapterDescriptionCreateInput!, update: ChapterDescriptionUpdateInput!): ChapterDescription!
+  upsertChapterFile(where: ChapterFileWhereUniqueInput!, create: ChapterFileCreateInput!, update: ChapterFileUpdateInput!): ChapterFile!
   upsertWishlist(where: WishlistWhereUniqueInput!, create: WishlistCreateInput!, update: WishlistUpdateInput!): Wishlist!
   upsertCourselist(where: CourselistWhereUniqueInput!, create: CourselistCreateInput!, update: CourselistUpdateInput!): Courselist!
   upsertCar(where: CarWhereUniqueInput!, create: CarCreateInput!, update: CarUpdateInput!): Car!
@@ -1299,6 +1663,7 @@ type Mutation {
   updateManyPosts(data: PostUpdateInput!, where: PostWhereInput): BatchPayload!
   updateManyChapters(data: ChapterUpdateInput!, where: ChapterWhereInput): BatchPayload!
   updateManyChapterDescriptions(data: ChapterDescriptionUpdateInput!, where: ChapterDescriptionWhereInput): BatchPayload!
+  updateManyChapterFiles(data: ChapterFileUpdateInput!, where: ChapterFileWhereInput): BatchPayload!
   updateManyWishlists(data: WishlistUpdateInput!, where: WishlistWhereInput): BatchPayload!
   updateManyCourselists(data: CourselistUpdateInput!, where: CourselistWhereInput): BatchPayload!
   updateManyCars(data: CarUpdateInput!, where: CarWhereInput): BatchPayload!
@@ -1307,6 +1672,7 @@ type Mutation {
   deleteManyPosts(where: PostWhereInput): BatchPayload!
   deleteManyChapters(where: ChapterWhereInput): BatchPayload!
   deleteManyChapterDescriptions(where: ChapterDescriptionWhereInput): BatchPayload!
+  deleteManyChapterFiles(where: ChapterFileWhereInput): BatchPayload!
   deleteManyWishlists(where: WishlistWhereInput): BatchPayload!
   deleteManyCourselists(where: CourselistWhereInput): BatchPayload!
   deleteManyCars(where: CarWhereInput): BatchPayload!
@@ -1784,6 +2150,7 @@ type Query {
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post]!
   chapters(where: ChapterWhereInput, orderBy: ChapterOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Chapter]!
   chapterDescriptions(where: ChapterDescriptionWhereInput, orderBy: ChapterDescriptionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ChapterDescription]!
+  chapterFiles(where: ChapterFileWhereInput, orderBy: ChapterFileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ChapterFile]!
   wishlists(where: WishlistWhereInput, orderBy: WishlistOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Wishlist]!
   courselists(where: CourselistWhereInput, orderBy: CourselistOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Courselist]!
   cars(where: CarWhereInput, orderBy: CarOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Car]!
@@ -1792,6 +2159,7 @@ type Query {
   post(where: PostWhereUniqueInput!): Post
   chapter(where: ChapterWhereUniqueInput!): Chapter
   chapterDescription(where: ChapterDescriptionWhereUniqueInput!): ChapterDescription
+  chapterFile(where: ChapterFileWhereUniqueInput!): ChapterFile
   wishlist(where: WishlistWhereUniqueInput!): Wishlist
   courselist(where: CourselistWhereUniqueInput!): Courselist
   car(where: CarWhereUniqueInput!): Car
@@ -1800,6 +2168,7 @@ type Query {
   postsConnection(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PostConnection!
   chaptersConnection(where: ChapterWhereInput, orderBy: ChapterOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ChapterConnection!
   chapterDescriptionsConnection(where: ChapterDescriptionWhereInput, orderBy: ChapterDescriptionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ChapterDescriptionConnection!
+  chapterFilesConnection(where: ChapterFileWhereInput, orderBy: ChapterFileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ChapterFileConnection!
   wishlistsConnection(where: WishlistWhereInput, orderBy: WishlistOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): WishlistConnection!
   courselistsConnection(where: CourselistWhereInput, orderBy: CourselistOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CourselistConnection!
   carsConnection(where: CarWhereInput, orderBy: CarOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CarConnection!
@@ -1822,6 +2191,7 @@ type Subscription {
   post(where: PostSubscriptionWhereInput): PostSubscriptionPayload
   chapter(where: ChapterSubscriptionWhereInput): ChapterSubscriptionPayload
   chapterDescription(where: ChapterDescriptionSubscriptionWhereInput): ChapterDescriptionSubscriptionPayload
+  chapterFile(where: ChapterFileSubscriptionWhereInput): ChapterFileSubscriptionPayload
   wishlist(where: WishlistSubscriptionWhereInput): WishlistSubscriptionPayload
   courselist(where: CourselistSubscriptionWhereInput): CourselistSubscriptionPayload
   car(where: CarSubscriptionWhereInput): CarSubscriptionPayload

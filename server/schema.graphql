@@ -4,10 +4,11 @@
 # import Subscription.chat from "./generated-schema.graphql"
 # import Mutation.createPost, Post from "./generated-schema.graphql"
 # import Mutation.createChat, Query.chatsConnection, Query.chat from "./generated-schema.graphql"
-# import Chapter from "./generated-schema.graphql"
+# import Chapter, ChapterCreateInput from "./generated-schema.graphql"
 # import Wishlist from "./generated-schema.graphql"
 # import Courselist from "./generated-schema.graphql"
 # import ChapterDescription from "./generated-schema.graphql"
+# import ChapterFile from "./generated-schema.graphql"
 
 
 type Query {
@@ -17,6 +18,8 @@ type Query {
   post(id: ID!): Post
   wishlist(userId: ID!): [Wishlist!]!
   courselist(userId: ID!): [Courselist!]!
+  chapters: [Chapter!]!
+  chapter(id: ID!): Chapter!
 }
 
 type Mutation {
@@ -32,10 +35,14 @@ type Mutation {
   updateCar(data: CarUpdateInput!, where: CarWhereUniqueInput!): Car
   updatePassword(oldPassword: String, newPassword: String!): User!
   forgetPassword(email: String!): User!
-  createChapter(name: String!, courseBy: ID!, description: String, files: String): Chapter!
   createWishlist(courseId: ID!, userId: ID!): Wishlist!
   deleteWishlist(id: ID!, courseId:ID!, userId:ID!):  Wishlist!
   createCourselist(courseId: ID!, userId: ID!): Courselist!
+  createChapter(name: String!, courseBy: ID!, files: String): Chapter!
+  deleteChapter(id: ID!): Chapter!
+  createChapterDescription(chapterId: ID!, title: String! text: String!): ChapterDescription!
+  deleteChapterDescription(id: ID!): ChapterDescription!
+  createChapterFile(chapterId: ID!, title: String! src: String!): ChapterFile!
 }
 
 type AuthPayload {

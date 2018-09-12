@@ -81,6 +81,18 @@ async function courselist (parent, { userId }, ctx, info) {
   }, info)
 }
 
+async function chapters (parent, args, ctx, info) {
+  return ctx.db.query.chapters();
+}
+
+async function chapter (parent, {id}, ctx, info) {
+  return ctx.db.query.chapter({
+    where: {
+        id
+    }
+  }, 
+  info)
+}
 
 const Query = {
   me,
@@ -93,6 +105,8 @@ const Query = {
   post,
   wishlist,
   courselist,
+  chapters,
+  chapter,
   // cars: forwardTo('db'),
   chatsConnection: forwardTo('db'),
   car: forwardTo('db'),

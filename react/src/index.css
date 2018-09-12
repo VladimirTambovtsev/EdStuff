@@ -1,7 +1,6 @@
 @import 'https://fonts.googleapis.com/css?family=Open+Sans:300, 400';
 
 
-
 body {
   margin: 0;
   padding: 0;
@@ -105,7 +104,9 @@ input {
   transform: translateY(-50%); /* IE 10, Fx 16+, Op 12.1+ */
 }
 
-
+.titleActive {
+  color: green;
+}
 
 .menuButton {
   margin-left: -12;

@@ -21,19 +21,27 @@ type Post {
 type Chapter {
   id: ID! @unique
   name: String!
-  description: String
   courseBy: Post
-  files: String
+  description: [ChapterDescription!]!
+  files: [ChapterFile!]!
   createdAt: DateTime!
 }
 
-type ChapterDescription {
+type ChapterDescription { 
   id: ID! @unique
   chapterId: Chapter!
+  title: String
   text: String!
   createdAt: DateTime!
 }
 
+type ChapterFile {
+  id: ID! @unique
+  chapterId: Chapter!
+  title: String!
+  src: String!
+  createdAt: DateTime!
+}
 
 type Wishlist {
   id: ID! @unique

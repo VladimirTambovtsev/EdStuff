@@ -70,21 +70,6 @@ async function createPost (parent, args, ctx, info) {
   return forwardTo('db')(parent, args, ctx, info)
 }
 
-async function createChapter (parent, args, ctx, info) {
-  // TODO: check if user is admin and is owner of the course
-
-  return ctx.db.mutation.createChapter(
-    {
-      data: {
-        courseBy: { connect: { id: args.courseBy } },
-        name: args.name,
-        description: args.description,
-        files: args.files
-      },
-    },
-    info,
-  )
-}
 
 async function createWishlist (parent, args, ctx, info) {
   const userId = getUserId(ctx) // requires auth
@@ -157,7 +142,70 @@ async function createCourselist (parent, args, ctx, info) {
   );
 }
 
-// async function createChapterDescription (parent, args, ctx, info) {  }
+async function deleteChapter (parent, args, ctx, info) {
+  return ctx.db.mutation.deleteChapter({ where: { id: args.id } })
+}
+
+
+async function createChapter (parent, args, ctx, info) {
+  // TODO: check if user is admin and is owner of the course
+
+  return ctx.db.mutation.createChapter(
+    {
+      data: {
+        courseBy: { connect: { id: args.courseBy } },
+        name: args.name,
+        files: args.files
+      },
+    },
+    info,
+  )
+}
+
+
+
+async function createChapterDescription (parent, args, ctx, info) { 
+  // check if user is author of this course
+  // check if chapter does not exists
+  const chapterExists = await ctx.db.exists.Chapter({
+    id: args.chapterId
+  })
+
+  if (!chapterExists) throw new Error("Chapter cannot be found")
+
+  return ctx.db.mutation.createChapterDescription({
+    data: {
+      chapterId: { connect: { id: args.chapterId } },
+      title: args.title,
+      text: args.text
+    }
+  },
+  info)
+}
+
+async function createChapterFile (parent, args, ctx, info) {
+  const chapterExists = await ctx.db.exists.Chapter({
+    id: args.chapterId
+  })
+
+  if (!chapterExists) throw new Error("Chapter cannot be found")
+
+  return ctx.db.mutation.createChapterFile({
+    data: {
+      chapterId: { connect: { id: args.chapterId } },
+      title: args.title,
+      src: args.src
+    }
+  },
+  info)
+}
+
+async function deleteChapterDescription (parent, args, ctx, info) {
+  // check if user is author 
+  return ctx.db.mutation.deleteChapterDescription({ 
+    where: { id: args.id } 
+  });
+}
 
 
 async function createChat (parent, args, ctx, info) {
@@ -199,6 +247,7 @@ const Mutation = {
   forgetPassword,
   deletePost,
   deleteUser,
+  deleteChapter,
   sendLinkValidateEmail,
   updateUser: (parent, args, ctx, info) => {
     // getUserId(ctx)
@@ -211,10 +260,13 @@ const Mutation = {
   deleteCar: deleteCar,
   updateCar: forwardTo('db'),
   createPost,
-  createChapter,
   createWishlist,
   deleteWishlist,
-  createCourselist
+  createCourselist,
+  createChapter,
+  createChapterDescription,
+  deleteChapterDescription,
+  createChapterFile
 }
 
 module.exports = {
